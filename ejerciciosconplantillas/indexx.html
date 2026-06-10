@@ -1,0 +1,341 @@
+"<!doctype html>
+<html lang=\"es\">
+<head>
+<meta charset=\"utf-8\" />
+<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />
+<title>Pikoo 3D · Juguetes únicos en impresión 3D</title>
+<meta name=\"description\" content=\"Juguetes infantiles únicos hechos con impresión 3D para niños de 4 a 8 años.\" />
+<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\" />
+<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin />
+<link href=\"https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap\" rel=\"stylesheet\" />
+<script src=\"https://cdn.tailwindcss.com\"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          heading: ['Fredoka', 'sans-serif'],
+          body: ['Nunito', 'sans-serif'],
+        },
+        colors: {
+          brand: {
+            sky:   '#38BDF8',
+            sun:   '#FBBF24',
+            coral: '#FB7185',
+            mint:  '#34D399',
+            ink:   '#1E293B',
+          },
+        },
+        keyframes: {
+          float:  { '0%,100%': { transform: 'translateY(0) rotate(-2deg)' }, '50%': { transform: 'translateY(-12px) rotate(2deg)' } },
+          wobble: { '0%,100%': { transform: 'rotate(-3deg)' }, '50%': { transform: 'rotate(3deg)' } },
+          fadeUp: { '0%': { opacity: 0, transform: 'translateY(20px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } },
+        },
+        animation: {
+          float: 'float 6s ease-in-out infinite',
+          wobble: 'wobble 2.5s ease-in-out infinite',
+          'fade-up': 'fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both',
+        },
+      },
+    },
+  };
+</script>
+<style>
+  body { font-family: 'Nunito', sans-serif; background: #FAFAFA; color: #1E293B; }
+  h1,h2,h3,h4 { font-family: 'Fredoka', sans-serif; font-weight: 700; letter-spacing: -0.01em; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; border-radius:9999px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; padding:.75rem 1.5rem; border-bottom-width:4px; transition:transform .15s, background-color .15s; user-select:none; cursor:pointer; }
+  .btn:active { transform: translateY(4px); border-bottom-width:0; }
+  .btn-coral { background:#FB7185; color:#fff; border-color:#be123c; }
+  .btn-coral:hover { background:#fb8b9d; }
+  .btn-sky   { background:#38BDF8; color:#fff; border-color:#0369a1; }
+  .btn-sky:hover { background:#7dd3fc; }
+  .btn-sun   { background:#FBBF24; color:#1E293B; border-color:#b45309; }
+  .btn-sun:hover { background:#fcd34d; }
+  .btn-ghost { background:#fff; color:#1E293B; border-color:#cbd5e1; }
+  .btn-ghost:hover { background:#f8fafc; }
+  .soft-card { background:#fff; border-radius:1.5rem; box-shadow:0 8px 30px rgba(15,23,42,.06); border:1px solid #f1f5f9; }
+  .pill { display:inline-flex; align-items:center; gap:.375rem; border-radius:9999px; padding:.25rem .75rem; font-size:.75rem; font-weight:800; text-transform:uppercase; letter-spacing:.075em; }
+  .grain-bg {
+    background-image:
+      radial-gradient(at 20% 10%, rgba(56,189,248,.18), transparent 50%),
+      radial-gradient(at 80% 0%,  rgba(251,191,36,.22), transparent 50%),
+      radial-gradient(at 40% 90%, rgba(251,113,133,.18), transparent 50%);
+  }
+  .cart-drawer { transform: translateX(100%); transition: transform .3s ease; }
+  .cart-drawer.open { transform: translateX(0); }
+  .overlay { opacity:0; pointer-events:none; transition: opacity .3s; }
+  .overlay.open { opacity:1; pointer-events:auto; }
+  .toast { animation: fadeUp .4s both; }
+</style>
+</head>
+<body class=\"font-body\">
+
+<!-- HEADER -->
+<header class=\"sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-slate-100\">
+  <div class=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 h-20 flex items-center justify-between\">
+    <a href=\"#top\" class=\"flex items-center gap-2 group\">
+      <span class=\"w-10 h-10 rounded-2xl bg-brand-sun flex items-center justify-center border-b-4 border-amber-600 group-hover:animate-wobble\">
+        <svg class=\"w-5 h-5 text-brand-ink\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M12 2l1.9 5.9H20l-4.9 3.6L17 17.5 12 14l-5 3.5 1.9-6L4 7.9h6.1z\"/></svg>
+      </span>
+      <span class=\"font-heading text-2xl sm:text-3xl text-brand-ink leading-none\">Pikoo<span class=\"text-brand-coral\">3D</span></span>
+    </a>
+    <nav class=\"hidden md:flex items-center gap-1\">
+      <a href=\"#top\" class=\"px-4 py-2 rounded-full font-bold text-sm text-brand-ink hover:bg-slate-100\">Inicio</a>
+      <a href=\"#tienda\" class=\"px-4 py-2 rounded-full font-bold text-sm text-brand-ink hover:bg-slate-100\">Tienda</a>
+      <a href=\"#plantilla\" class=\"px-4 py-2 rounded-full font-bold text-sm text-brand-ink hover:bg-slate-100\">Plantilla</a>
+      <a href=\"#faq\" class=\"px-4 py-2 rounded-full font-bold text-sm text-brand-ink hover:bg-slate-100\">FAQ</a>
+    </nav>
+    <button onclick=\"toggleCart(true)\" class=\"relative inline-flex items-center gap-2 rounded-full bg-brand-ink text-white px-5 py-2.5 font-bold text-sm border-b-4 border-slate-900 active:translate-y-1 active:border-b-0\">
+      <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" viewBox=\"0 0 24 24\"><path d=\"M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 11-8 0\"/></svg>
+      <span class=\"hidden sm:inline\">Carrito</span>
+      <span id=\"cart-count\" class=\"absolute -top-2 -right-2 min-w-[22px] h-[22px] rounded-full bg-brand-coral text-white text-xs font-black flex items-center justify-center px-1 border-2 border-white\">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id=\"top\" class=\"grain-bg overflow-hidden\">
+  <div class=\"max-w-7xl mx-auto px-6 lg:px-10 pt-12 pb-20 lg:pt-20 lg:pb-32 grid lg:grid-cols-2 gap-12 items-center\">
+    <div>
+      <span class=\"pill bg-white text-brand-ink border border-slate-200 mb-6\">✨ Hecho a mano con impresoras 3D</span>
+      <h1 class=\"text-5xl sm:text-6xl lg:text-7xl text-brand-ink leading-[1.05]\">
+        Imprimimos <span class=\"text-brand-coral\">sonrisas</span> en 3D para los
+        <span class=\"relative inline-block\"><span class=\"relative z-10\">peques</span><span class=\"absolute inset-x-0 bottom-1 h-3 bg-brand-sun -z-0 rounded\"></span></span>
+      </h1>
+      <p class=\"mt-6 text-lg text-slate-600 max-w-xl leading-relaxed\">
+        Juguetes únicos diseñados e impresos en 3D para niñas y niños de 4 a 8 años.
+        Materiales seguros, colores que enamoran y muchísima imaginación.
+      </p>
+      <div class=\"mt-8 flex flex-wrap gap-3\">
+        <a href=\"#tienda\" class=\"btn btn-coral\">Ver la tienda →</a>
+      </div>
+    </div>
+    <div class=\"relative\">
+      <div class=\"relative aspect-[4/5] max-w-md mx-auto\">
+        <div class=\"absolute -top-4 -left-4 w-32 h-32 bg-brand-sun rounded-full opacity-80 animate-float\"></div>
+        <div class=\"absolute -bottom-6 -right-6 w-40 h-40 bg-brand-coral rounded-full opacity-70 animate-float\" style=\"animation-delay:1s\"></div>
+        <div class=\"relative w-full h-full rounded-[2rem] overflow-hidden shadow-[0_20px_60px_rgba(15,23,42,.18)] border-8 border-white\">
+          <!-- 👇 REEMPLAZA POR TU IMAGEN -->
+          <img src=\"https://images.unsplash.com/photo-1495900593237-22dc861b231d?auto=format&fit=crop&w=900&q=80\" alt=\"Niño jugando\" class=\"w-full h-full object-cover\" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERKS -->
+<section class=\"max-w-7xl mx-auto px-6 lg:px-10 -mt-10 relative z-20\">
+  <div class=\"grid grid-cols-1 md:grid-cols-3 gap-4\">
+    <div class=\"soft-card p-5 flex items-center gap-4\">
+      <span class=\"w-12 h-12 rounded-2xl bg-brand-sky flex items-center justify-center shrink-0 text-white text-2xl\">🛡️</span>
+      <div><p class=\"font-heading text-lg text-brand-ink leading-tight\">Materiales seguros</p><p class=\"text-sm text-slate-500\">PLA biodegradable, no tóxico.</p></div>
+    </div>
+    <div class=\"soft-card p-5 flex items-center gap-4\">
+      <span class=\"w-12 h-12 rounded-2xl bg-brand-sun flex items-center justify-center shrink-0 text-white text-2xl\">🚚</span>
+      <div><p class=\"font-heading text-lg text-brand-ink leading-tight\">Envío 24-72h</p><p class=\"text-sm text-slate-500\">A toda España.</p></div>
+    </div>
+    <div class=\"soft-card p-5 flex items-center gap-4\">
+      <span class=\"w-12 h-12 rounded-2xl bg-brand-coral flex items-center justify-center shrink-0 text-white text-2xl\">🎨</span>
+      <div><p class=\"font-heading text-lg text-brand-ink leading-tight\">Personalizable</p><p class=\"text-sm text-slate-500\">Elige color y nombre.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TIENDA · SOLO 2 PRODUCTOS -->
+<section id=\"tienda\" class=\"max-w-7xl mx-auto px-6 lg:px-10 mt-24\">
+  <div class=\"mb-10 text-center\">
+    <span class=\"pill bg-rose-100 text-rose-700\">🛍️ Nuestros juguetes</span>
+    <h2 class=\"text-4xl lg:text-5xl text-brand-ink mt-3\">Pequeños, únicos y con mucho cariño</h2>
+  </div>
+
+  <div class=\"grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-4xl mx-auto\">
+    <!-- 👇 PRODUCTO 1 -->
+    <article class=\"soft-card overflow-hidden group hover:-translate-y-1 transition-all duration-300 animate-fade-up flex flex-col\">
+      <div class=\"relative aspect-square bg-slate-50 overflow-hidden\">
+        <img src=\"https://images.unsplash.com/photo-1610081574260-e61e93e6e1aa?auto=format&fit=crop&w=900&q=80\"
+             alt=\"Producto 1\"
+             class=\"w-full h-full object-cover group-hover:scale-105 transition-transform duration-500\" />
+        <span class=\"absolute top-3 left-3 pill text-white\" style=\"background:#34D399\">4–8 años</span>
+      </div>
+      <div class=\"p-6 flex flex-col gap-3 flex-1\">
+        <h3 class=\"text-2xl text-brand-ink leading-tight\">Nombre del Producto 1</h3>
+        <p class=\"text-sm text-slate-500\">Breve descripción del producto. Materiales, edades, qué lo hace especial.</p>
+        <div class=\"flex items-center justify-between mt-auto pt-3\">
+          <span class=\"font-heading text-3xl text-brand-ink\">18,90€</span>
+          <button onclick='addToCart({id:\"prod-1\",name:\"Nombre del Producto 1\",price:18.90,image:\"https://images.unsplash.com/photo-1610081574260-e61e93e6e1aa?auto=format&fit=crop&w=400&q=80\"})'
+                  class=\"btn btn-coral !px-5 !py-2 text-sm\">+ Añadir</button>
+        </div>
+      </div>
+    </article>
+
+    <!-- 👇 PRODUCTO 2 -->
+    <article class=\"soft-card overflow-hidden group hover:-translate-y-1 transition-all duration-300 animate-fade-up flex flex-col\" style=\"animation-delay:80ms\">
+      <div class=\"relative aspect-square bg-slate-50 overflow-hidden\">
+        <img src=\"https://images.pexels.com/photos/14158951/pexels-photo-14158951.jpeg?auto=compress&w=900\"
+             alt=\"Producto 2\"
+             class=\"w-full h-full object-cover group-hover:scale-105 transition-transform duration-500\" />
+        <span class=\"absolute top-3 left-3 pill text-white\" style=\"background:#38BDF8\">4–8 años</span>
+      </div>
+      <div class=\"p-6 flex flex-col gap-3 flex-1\">
+        <h3 class=\"text-2xl text-brand-ink leading-tight\">Nombre del Producto 2</h3>
+        <p class=\"text-sm text-slate-500\">Breve descripción del producto. Materiales, edades, qué lo hace especial.</p>
+        <div class=\"flex items-center justify-between mt-auto pt-3\">
+          <span class=\"font-heading text-3xl text-brand-ink\">15,50€</span>
+          <button onclick='addToCart({id:\"prod-2\",name:\"Nombre del Producto 2\",price:15.50,image:\"https://images.pexels.com/photos/14158951/pexels-photo-14158951.jpeg?auto=compress&w=400\"})'
+                  class=\"btn btn-coral !px-5 !py-2 text-sm\">+ Añadir</button>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- PLANTILLA USADA -->
+<section id=\"plantilla\" class=\"max-w-7xl mx-auto px-6 lg:px-10 mt-28\">
+  <div class=\"grid lg:grid-cols-2 gap-10 items-center\">
+    <div class=\"order-2 lg:order-1\">
+      <span class=\"pill bg-sky-100 text-sky-700\">📐 Diseño 3D</span>
+      <h2 class=\"text-4xl lg:text-5xl text-brand-ink mt-3 leading-tight\">La plantilla<br />que usamos</h2>
+      <p class=\"text-slate-600 mt-4 text-lg leading-relaxed max-w-md\">
+        Cada juguete parte de un modelo 3D diseñado a medida.
+        Lo afinamos capa a capa hasta que queda perfecto para imprimir.
+      </p>
+    </div>
+    <div class=\"order-1 lg:order-2 relative\">
+      <div class=\"absolute -top-6 -right-6 w-40 h-40 bg-brand-mint/40 rounded-full blur-2xl\"></div>
+      <div class=\"relative rounded-[2rem] overflow-hidden border-8 border-white shadow-[0_20px_60px_rgba(15,23,42,.18)] aspect-[4/3] bg-slate-100\">
+        <!-- 👇 Cambia esta imagen por tu plantilla/modelo 3D -->
+        <img src=\"https://images.unsplash.com/photo-1631544114951-ed5a6f2f1473?auto=format&fit=crop&w=1200&q=80\"
+             alt=\"Plantilla 3D usada\"
+             class=\"w-full h-full object-cover\" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id=\"faq\" class=\"max-w-7xl mx-auto px-6 lg:px-10 mt-24\">
+  <div class=\"rounded-[2rem] bg-brand-sun/20 p-10 md:p-14\">
+    <h2 class=\"text-3xl md:text-4xl text-brand-ink mb-6 max-w-2xl\">Preguntas frecuentes</h2>
+    <div class=\"grid md:grid-cols-2 gap-6\">
+      <div class=\"soft-card p-5\"><p class=\"font-heading text-lg text-brand-ink mb-1\">¿Son seguros para niños pequeños?</p><p class=\"text-slate-600 text-sm leading-relaxed\">Sí. Usamos PLA, un material no tóxico hecho a base de maíz. Supervisión adulta recomendada en menores de 4 años.</p></div>
+      <div class=\"soft-card p-5\"><p class=\"font-heading text-lg text-brand-ink mb-1\">¿Puedo personalizar el color?</p><p class=\"text-slate-600 text-sm leading-relaxed\">Claro. Indícalo en las notas del pedido y haremos lo posible.</p></div>
+      <div class=\"soft-card p-5\"><p class=\"font-heading text-lg text-brand-ink mb-1\">¿Cuánto tarda el envío?</p><p class=\"text-slate-600 text-sm leading-relaxed\">Entre 24h y 72h en península tras confirmar pedido.</p></div>
+      <div class=\"soft-card p-5\"><p class=\"font-heading text-lg text-brand-ink mb-1\">¿Cómo se paga?</p><p class=\"text-slate-600 text-sm leading-relaxed\">Confirmamos el pedido y elegimos el método de pago (Bizum, transferencia…).</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class=\"mt-20 bg-brand-ink text-white\">
+  <div class=\"max-w-7xl mx-auto px-6 lg:px-10 py-10 flex items-center justify-center\">
+    <div class=\"flex items-center gap-2\">
+      <span class=\"w-10 h-10 rounded-2xl bg-brand-sun flex items-center justify-center text-brand-ink text-xl\">★</span>
+      <span class=\"font-heading text-2xl\">Pikoo<span class=\"text-brand-coral\">3D</span></span>
+    </div>
+  </div>
+  <div class=\"border-t border-white/10 py-6 text-center text-sm text-slate-300\">
+    Hecho por <span class=\"font-bold text-white\">Mireia Lobo Egea</span> ♥
+  </div>
+</footer>
+
+<!-- CART OVERLAY + DRAWER -->
+<div id=\"overlay\" onclick=\"toggleCart(false)\" class=\"overlay fixed inset-0 bg-black/50 z-40\"></div>
+<aside id=\"cart\" class=\"cart-drawer fixed top-0 right-0 h-full w-full sm:max-w-md bg-white z-50 flex flex-col shadow-2xl\">
+  <div class=\"px-6 py-5 border-b border-slate-100 flex items-center justify-between\">
+    <h3 class=\"font-heading text-2xl flex items-center gap-2\">🛍️ Tu carrito</h3>
+    <button onclick=\"toggleCart(false)\" class=\"w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 inline-flex items-center justify-center\">✕</button>
+  </div>
+  <div id=\"cart-items\" class=\"flex-1 overflow-y-auto px-6 py-5 space-y-3\"></div>
+  <div id=\"cart-footer\" class=\"px-6 py-5 border-t border-slate-100 hidden\">
+    <div class=\"flex items-center justify-between mb-4\">
+      <span class=\"text-sm uppercase tracking-wider font-bold text-slate-500\">Subtotal</span>
+      <span id=\"cart-total\" class=\"font-heading text-2xl text-brand-ink\">0,00€</span>
+    </div>
+    <button onclick=\"checkout()\" class=\"btn btn-coral w-full\">Finalizar pedido</button>
+  </div>
+</aside>
+
+<!-- TOASTS -->
+<div id=\"toasts\" class=\"fixed bottom-5 right-5 z-[60] space-y-2\"></div>
+
+<script>
+  const KEY = 'pikoo_cart_v1';
+  let cart = JSON.parse(localStorage.getItem(KEY) || '[]');
+
+  function save() { localStorage.setItem(KEY, JSON.stringify(cart)); render(); }
+
+  function addToCart(p) {
+    const ex = cart.find(i => i.id === p.id);
+    if (ex) ex.qty += 1;
+    else cart.push({ ...p, qty: 1 });
+    save();
+    toast(`¡${p.name} añadido!`);
+  }
+
+  function updateQty(id, delta) {
+    const it = cart.find(i => i.id === id);
+    if (!it) return;
+    it.qty += delta;
+    if (it.qty <= 0) cart = cart.filter(i => i.id !== id);
+    save();
+  }
+
+  function removeItem(id) { cart = cart.filter(i => i.id !== id); save(); }
+
+  function render() {
+    document.getElementById('cart-count').textContent = cart.reduce((s,i)=>s+i.qty,0);
+    const list = document.getElementById('cart-items');
+    const footer = document.getElementById('cart-footer');
+    if (cart.length === 0) {
+      list.innerHTML = `<div class=\"h-full flex flex-col items-center justify-center text-center py-16\">
+        <div class=\"w-24 h-24 rounded-full bg-amber-100 flex items-center justify-center mb-4 text-4xl\">🛍️</div>
+        <p class=\"font-heading text-xl text-brand-ink mb-2\">Tu carrito está vacío</p>
+        <p class=\"text-slate-500\">¡Añade algún juguete!</p></div>`;
+      footer.classList.add('hidden');
+      return;
+    }
+    list.innerHTML = cart.map(i => `
+      <div class=\"flex gap-3 soft-card p-3\">
+        <img src=\"${i.image}\" alt=\"\" class=\"w-20 h-20 rounded-2xl object-cover\" />
+        <div class=\"flex-1 min-w-0\">
+          <p class=\"font-heading text-base text-brand-ink leading-tight\">${i.name}</p>
+          <p class=\"text-sm text-slate-500\">${i.price.toFixed(2).replace('.',',')}€</p>
+          <div class=\"flex items-center gap-2 mt-2\">
+            <button onclick=\"updateQty('${i.id}',-1)\" class=\"w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200\">−</button>
+            <span class=\"w-6 text-center font-bold\">${i.qty}</span>
+            <button onclick=\"updateQty('${i.id}',1)\" class=\"w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200\">+</button>
+            <button onclick=\"removeItem('${i.id}')\" class=\"ml-auto w-8 h-8 rounded-full text-rose-500 hover:bg-rose-50\">🗑</button>
+          </div>
+        </div>
+      </div>`).join('');
+    const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
+    document.getElementById('cart-total').textContent = total.toFixed(2).replace('.',',') + '€';
+    footer.classList.remove('hidden');
+  }
+
+  function toggleCart(open) {
+    document.getElementById('cart').classList.toggle('open', open);
+    document.getElementById('overlay').classList.toggle('open', open);
+  }
+
+  function toast(msg) {
+    const el = document.createElement('div');
+    el.className = 'toast soft-card px-4 py-3 bg-brand-mint text-white font-bold rounded-2xl';
+    el.textContent = msg;
+    document.getElementById('toasts').appendChild(el);
+    setTimeout(() => el.remove(), 2500);
+  }
+
+  function checkout() {
+    if (cart.length === 0) return;
+    alert('¡Pedido recibido! Gracias por tu compra. ♥');
+    cart = [];
+    save();
+    toggleCart(false);
+  }
+
+  render();
+</script>
+</body>
+</html>
+"
